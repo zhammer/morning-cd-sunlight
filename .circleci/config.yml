@@ -63,7 +63,7 @@ jobs:
           at: .workspace
       - run:
           name: Deploy serverless package
-          command: yarn run sls deploy -p .workspace/serverless_build
+          command: yarn run sls deploy -p .workspace/serverless_package
 
 workflows:
   version: 2

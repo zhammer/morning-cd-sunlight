@@ -1,0 +1,32 @@
+service: sunlight
+
+provider:
+  name: aws
+  runtime: python3.7
+  apiKeys:
+    - sunlight-service-key
+
+package:
+  include:
+    - sunlight/**
+
+functions:
+  get-sunlight-window:
+    description: Get the approximate sunlight window for an iana timezone on a given date
+    handler:
+      sunlight/delivery/aws_lambda/get_sunlight_window.handler
+    events:
+      - http:
+          path: /
+          method: get
+          private: true
+
+custom:
+  customDomain:
+    domainName: micro.morningcd.com
+    certificateName: "*.morningcd.com"
+    basePath: sunlight
+
+plugins:
+  - serverless-python-requirements
+  - serverless-domain-manager

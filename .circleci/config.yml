@@ -69,7 +69,8 @@ workflows:
     jobs:
       - test
       - build-serverless-package
-      - test-verify-pacts
+      - test-verify-pacts:
+          context: morningcd-pact-broker
 
       # master jobs
       - deploy-hold:
@@ -83,6 +84,7 @@ workflows:
             - test-verify-pacts
 
       - deploy:
+          context: morningcd-aws
           filters:
             branches:
               only: master
@@ -90,6 +92,7 @@ workflows:
             - deploy-hold
 
       - verify-pacts:
+          context: morningcd-pact-broker
           filters:
             branches:
               only: master

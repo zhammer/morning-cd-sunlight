@@ -86,8 +86,8 @@ workflows:
           filters:
             branches:
               only: master
-            requires:
-              - deploy-hold
+          requires:
+            - deploy-hold
 
       - verify-pacts:
           filters:

@@ -107,11 +107,11 @@
         },
         "faaspact-verifier": {
             "hashes": [
-                "sha256:3771780f4ba470f92658dfeffd6659be7832206cccd5a666b0a21e463e408e86",
-                "sha256:a01c63f9f300633e15d0d4e996e119bc2c845f65b92152cb4e89e6a7568ebefe"
+                "sha256:00220884d9a1c409a430f91f2b354866ca77d928b274ce72cfb16e67daeb20ab",
+                "sha256:b14174eb65a02c53e3fea692670cf055740d71de64385405a7af1b5247d94f25"
             ],
             "index": "pypi",
-            "version": "==0.0.2"
+            "version": "==0.0.3"
         },
         "flake8": {
             "hashes": [

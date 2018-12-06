@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 
-from faaspact_verifier import faasport, provider_state  # noqa: F401
+from faaspact_verifier import faasport
 from faaspact_verifier.definitions import Request, Response
 
 from sunlight.delivery.aws_lambda.get_sunlight_window import handler

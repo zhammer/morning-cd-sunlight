@@ -1,0 +1,137 @@
+version: 2.1
+
+jobs:
+  test:
+    executor: python-node-executor
+    steps:
+      - checkout
+      - install-python-dependencies
+      - run:
+          name: Run mypy
+          command: pipenv run mypy sunlight/
+      - run:
+          name: Run flake8
+          command: pipenv run flake8 sunlight/
+      - run:
+          name: Run pytest
+          command: pipenv run pytest --junitxml=test-results/pytest/results.xml
+      - run:
+          name: Run behave
+          command: pipenv run behave --junit --junit-directory=test-results/behave --no-color
+      - store_test_results:
+          path: test-results
+
+  test-verify-pacts:
+    executor: python-node-executor
+    steps:
+      - checkout
+      - install-python-dependencies
+      - run:
+          name: Verify pacts (but dont publish)
+          command: >-
+            PYTHONPATH=. pipenv run faaspact-verifier -p sunlight -f faasport
+            --github-pr "$CIRCLE_PULL_REQUEST"
+
+  verify-pacts:
+    executor: python-node-executor
+    steps:
+      - checkout
+      - install-python-dependencies
+      - run:
+          name: Verify pacts and publish results
+          command: PYTHONPATH=. pipenv run faaspact-verifier -p sunlight -f faasport --publish-results
+
+  build-serverless-package:
+    executor: python-node-executor
+    steps:
+      - checkout
+      - install-js-dependencies
+      - run:
+          name: Build serverless package
+          command: yarn run sls package -p .workspace/serverless_package
+      - persist_to_workspace:
+          root: .workspace
+          paths:
+            - serverless_package
+
+  deploy:
+    executor: python-node-executor
+    steps:
+      - checkout
+      - install-js-dependencies
+      - attach_workspace:
+          at: .workspace
+      - run:
+          name: Deploy serverless package
+          command: yarn run sls deploy -p .workspace/serverless_build
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - test
+      - build-serverless-package
+      - test-verify-pacts:
+          context: morningcd-pact-broker
+
+      # master jobs
+      - deploy-hold:
+          filters:
+            branches:
+              only: master
+          type: approval
+          requires:
+            - test
+            - build-serverless-package
+            - test-verify-pacts
+
+      - deploy:
+          context: morningcd-aws
+          filters:
+            branches:
+              only: master
+          requires:
+            - deploy-hold
+
+      - verify-pacts:
+          context: morningcd-pact-broker
+          filters:
+            branches:
+              only: master
+          requires:
+            - deploy
+
+executors:
+  python-node-executor:
+    docker:
+      - image: circleci/python:3.7.1-stretch-node
+
+commands:
+  install-python-dependencies:
+    description: "Install python dependencies from Pipfile.lock and cache results."
+    steps:
+      - restore_cache:
+          keys:
+            - pipenv-cache-{{ checksum "Pipfile.lock" }}
+            - pipenv-cache-
+      - run:
+          name: Install dependencies
+          command: pipenv sync --dev
+      - save_cache:
+          key: pipenv-cache-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ~/.local
+            - ~/.cache
+
+  install-js-dependencies:
+    steps:
+      - restore_cache:
+          keys:
+            - js-cache-{{ checksum "yarn.lock" }}
+            - js-cache-
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - save_cache:
+          key: js-cache-{{ checksum "yarn.lock" }}
+          paths: node_modules

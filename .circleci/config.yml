@@ -28,7 +28,9 @@ jobs:
       - install-python-dependencies
       - run:
           name: Verify pacts (but dont publish)
-          command: pipenv run faaspact-verifier -p sunlight -f faasport --github-pr "$CIRCLE_PULL_REQUEST"
+          command: >-
+            PYTHONPATH=. pipenv run faaspact-verifier -p sunlight -f faasport
+            --github-pr "$CIRCLE_PULL_REQUEST"
 
   verify-pacts:
     executor: python-node-executor
@@ -37,7 +39,7 @@ jobs:
       - install-python-dependencies
       - run:
           name: Verify pacts and publish results
-          command: pipenv run faaspact-verifier -p sunlight -f faasport --publish-results
+          command: PYTHONPATH=. pipenv run faaspact-verifier -p sunlight -f faasport --publish-results
 
   build-serverless-package:
     executor: python-node-executor

@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import date
 from typing import Dict
 
@@ -10,10 +11,11 @@ from sunlight.definitions import exceptions
 from sunlight.delivery.aws_lambda import util
 
 
-sentry_sdk.init(
-    dsn="https://e29ca6959f374a3d8381fc6e15316caa@sentry.io/1357226",
-    integrations=[AwsLambdaIntegration()]
-)
+if os.environ.get('AWS_EXECUTION_ENV'):
+    sentry_sdk.init(
+        dsn="https://e29ca6959f374a3d8381fc6e15316caa@sentry.io/1357226",
+        integrations=[AwsLambdaIntegration()]
+    )
 
 
 def handler(event: Dict, context: Dict) -> Dict:

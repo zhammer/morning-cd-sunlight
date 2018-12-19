@@ -17,6 +17,7 @@ faaspact-verifier = "*"
 [packages]
 requests = "*"
 iana-tz-coord = "*"
+sentry-sdk = "*"
 
 [requires]
 python_version = "3.7"

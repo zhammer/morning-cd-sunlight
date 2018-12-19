@@ -2,9 +2,18 @@ import json
 from datetime import date
 from typing import Dict
 
+import sentry_sdk
+from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
+
 from sunlight import use_sunlight_windows
 from sunlight.definitions import exceptions
 from sunlight.delivery.aws_lambda import util
+
+
+sentry_sdk.init(
+    dsn="https://e29ca6959f374a3d8381fc6e15316caa@sentry.io/1357226",
+    integrations=[AwsLambdaIntegration()]
+)
 
 
 def handler(event: Dict, context: Dict) -> Dict:

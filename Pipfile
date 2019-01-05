@@ -16,7 +16,7 @@ faaspact-verifier = "*"
 
 [packages]
 requests = "*"
-iana-tz-coord = ">=1.0.1"
+iana-tz-coord = ">=1.0.2"
 sentry-sdk = "*"
 
 [requires]

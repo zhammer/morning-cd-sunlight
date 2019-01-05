@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "eb4b2cbc3f8356599019597bb92d83f84167574632d347f650501a0c7bb911b9"
+            "sha256": "892bdb68cb82f06ee29369dc3f7e0a5748dd1cd8bd9beb9de7f4a3cabbda5622"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,11 +32,11 @@
         },
         "iana-tz-coord": {
             "hashes": [
-                "sha256:4e6de5b54db8993e8bb549ab9a031fce78c7b92b7963ed17aa4d352a1a2a0fe2",
-                "sha256:a15b9a1e60280e72f7cb5787abd923e082ad708d63fabf114368fd3b5b503783"
+                "sha256:6b8f84c38f63cc9cdfa8ed2d9d97d0d6af9e1999627e3e4a5e71131060d8cdd9",
+                "sha256:f5aee0dcb9203da75a01a807e18392a0dfc2d20067dea2124c0c0e3e3cff7fdc"
             ],
             "index": "pypi",
-            "version": "==1.0.1"
+            "version": "==1.0.2"
         },
         "idna": {
             "hashes": [

@@ -18,6 +18,7 @@ faaspact-verifier = "*"
 requests = "*"
 iana-tz-coord = ">=1.0.3"
 sentry-sdk = "*"
+aws-xray-sdk = "*"
 
 [requires]
 python_version = "3.7"
